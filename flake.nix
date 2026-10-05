@@ -65,6 +65,13 @@
       |> (map (p: lib.nameValuePair (lib.removeSuffix ".nix" (baseNameOf p)) p))
       |> lib.listToAttrs;
 
+    # For the ISOs
+    hydraJobs = self.packages;
+    packages."x86_64-linux" = {
+      Finality = self.nixosConfigurations.Finality.config.system.build.isoImage;
+      Origin = self.nixosConfigurations.Origin.config.system.build.isoImage;
+    };
+
     # For `nix fmt`
     formatter = forAllSystems ({ pkgs, alejandra, ... }:
       pkgs.writeShellApplication {
