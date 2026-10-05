@@ -1,0 +1,10 @@
+result
+result-*
+result/
+
+.direnv/
+.envrc
+.vscode/
+
+**.qcow2
+**.fd
