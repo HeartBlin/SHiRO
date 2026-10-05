@@ -76,10 +76,32 @@
       ISOs = [ "Origin" "Finality" ];
       mkIso = name:
         pkgs.runCommand "${name}.iso" { } ''
-          cp ${self.nixosConfigurations.${name}.config.system.build.isoImage}/iso/${name}.iso $out
+          mkdir -p $out/nix-support
+          cp ${self.nixosConfigurations.${name}.config.system.build.isoImage}/iso/${name}.iso $out/${name}.iso
+          echo "file iso $out/${name}.iso" >> $out/nix-support/hydra-build-products
         '';
+
+      mkPatch = name: iso:
+        pkgs.runCommand "${name}-artifacts" {
+          nativeBuildInputs = [ inputs.kuro.packages."x86_64-linux".patch-origin-finality ];
+        } ''
+          mkdir -p work $out/nix-support
+          cd work
+
+          patch-origin-finality ${iso}/${name}.iso
+
+          for f in *; do
+            cp -r "$f" "$out/$f"
+            echo "file data $out/$f" >> $out/nix-support/hydra-build-products
+          done
+        '';
+
+      isos = lib.genAttrs ISOs mkIso;
     in
-      lib.genAttrs ISOs mkIso;
+      isos
+      // lib.listToAttrs (map
+        (name: lib.nameValuePair "${name}-patch" (mkPatch name isos.${name}))
+        ISOs);
 
     # For `nix fmt`
     formatter = forAllSystems ({ pkgs, alejandra, ... }:
