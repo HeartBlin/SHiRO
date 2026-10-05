@@ -27,8 +27,7 @@
   '';
 
   # Get this flake in the ISO.
-  environment.etc."iNFRA".source = lib.cleanSource "${self}";
-
+  environment.etc."SHiRO".source = lib.cleanSource "${self}";
   image.baseName = lib.mkForce "Origin";
   isoImage = {
     volumeID = lib.mkForce "Origin";

@@ -5,7 +5,7 @@
 
   # Host Specific
   # This is a CA workflow Live ISO env
-  environment.systemPackages = [ pkgs.step-cli pkgs.step-ca pkgs.openssl ];
+  environment.systemPackages = [ pkgs.step-cli pkgs.openssl ];
 
   networking = {
     enableIPv6 = lib.mkForce false;
