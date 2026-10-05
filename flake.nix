@@ -34,6 +34,11 @@
   };
 
   outputs = inputs: let
+    pkgs = import inputs.nixpkgs {
+      system = "x86_64-linux";
+      config.allowUnfree = true;
+    };
+
     inherit (inputs) self;
     inherit (inputs.nixpkgs) lib;
 
@@ -67,10 +72,14 @@
 
     # For the ISOs
     hydraJobs = self.packages;
-    packages."x86_64-linux" = {
-      Finality = self.nixosConfigurations.Finality.config.system.build.isoImage;
-      Origin = self.nixosConfigurations.Origin.config.system.build.isoImage;
-    };
+    packages."x86_64-linux" = let
+      ISOs = [ "Origin" "Finality" ];
+      mkIso = name:
+        pkgs.runCommand "${name}.iso" { } ''
+          cp ${self.nixosConfigurations.${name}.config.system.build.isoImage}/iso/${name}.iso $out
+        '';
+    in
+      lib.genAttrs ISOs mkIso;
 
     # For `nix fmt`
     formatter = forAllSystems ({ pkgs, alejandra, ... }:
