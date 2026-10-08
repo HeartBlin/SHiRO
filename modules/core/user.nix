@@ -13,6 +13,8 @@
     };
 
     hjem = {
+      cli.package = inputs.hjem.packages."x86_64-linux".hjem;
+      linker = inputs.hjem.packages."x86_64-linux".hjem;
       clobberByDefault = true;
       users.primaryUser = {
         enable = true;

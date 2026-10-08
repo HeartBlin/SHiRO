@@ -66,7 +66,7 @@
 
       trusted-public-keys = [
         "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-        "hydra.heartblin.eu-1:Av5Jl8Y2V+uagfqMbKvTKY7G8F2uWaVekhcBhoBxE5Y="
+        "cache.heartblin.eu-1:XicnTDFCv9Nfhfz7hgQi1AoBqs5z5xTmzhTydB+tK6Q="
       ];
     };
   };

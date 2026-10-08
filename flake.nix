@@ -1,16 +1,13 @@
 {
   inputs = {
     nixpkgs.url = "https://channels.nixos.org/nixos-unstable/nixexprs.tar.zst";
-    systems.url = "github:nix-systems/x86_64-linux";
+
+    # Cached by own Hydra instance
     kuro.url = "github:HeartBlin/KURO";
+    hjem.url = "github:HeartBlin/hjem-shim";
 
     disko = {
       url = "github:nix-community/disko";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    hjem = {
-      url = "github:feel-co/hjem";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -34,23 +31,15 @@
   };
 
   outputs = inputs: let
-    pkgs = import inputs.nixpkgs {
-      system = "x86_64-linux";
-      config.allowUnfree = true;
-    };
-
     inherit (inputs) self;
     inherit (inputs.nixpkgs) lib;
 
-    forAllSystems = x:
-      lib.genAttrs (import inputs.systems) (
-        system:
-          x {
-            inherit system;
-            pkgs = inputs.nixpkgs.legacyPackages.${system};
-            alejandra = inputs.kuro.packages.${system}.alejandra-custom;
-          }
-      );
+    system = "x86_64-linux";
+    alejandra = inputs.kuro.packages.${system}.alejandra-custom;
+    pkgs = import inputs.nixpkgs {
+      inherit system;
+      config.allowUnfree = true;
+    };
   in {
     # Find all hosts
     nixosConfigurations =
@@ -70,53 +59,19 @@
       |> (map (p: lib.nameValuePair (lib.removeSuffix ".nix" (baseNameOf p)) p))
       |> lib.listToAttrs;
 
-    # For the ISOs
-    hydraJobs = self.packages;
-    packages."x86_64-linux" = let
-      ISOs = [ "Origin" "Finality" ];
-      mkIso = name:
-        pkgs.runCommand "${name}.iso" { } ''
-          mkdir -p $out/nix-support
-          cp ${self.nixosConfigurations.${name}.config.system.build.isoImage}/iso/${name}.iso $out/${name}.iso
-          echo "file iso $out/${name}.iso" >> $out/nix-support/hydra-build-products
-        '';
-
-      mkPatch = name: iso:
-        pkgs.runCommand "${name}-artifacts" {
-          nativeBuildInputs = [ inputs.kuro.packages."x86_64-linux".patch-origin-finality ];
-        } ''
-          mkdir -p work $out/nix-support
-          cd work
-
-          patch-origin-finality ${iso}/${name}.iso
-
-          for f in *; do
-            cp -r "$f" "$out/$f"
-            echo "file data $out/$f" >> $out/nix-support/hydra-build-products
-          done
-        '';
-
-      isos = lib.genAttrs ISOs mkIso;
-    in
-      isos
-      // lib.listToAttrs (map
-        (name: lib.nameValuePair "${name}-patch" (mkPatch name isos.${name}))
-        ISOs);
-
     # For `nix fmt`
-    formatter = forAllSystems ({ pkgs, alejandra, ... }:
-      pkgs.writeShellApplication {
-        name = "format";
-        runtimeInputs = [ alejandra pkgs.deadnix pkgs.statix ];
-        text = ''
-          deadnix --edit "$@"
-          statix fix "$@"
-          alejandra  "$@"
-        '';
-      });
+    formatter.${system} = pkgs.writeShellApplication {
+      name = "format";
+      text = ''deadnix --edit "$@" && statix fix "$@" && alejandra "$@"'';
+      runtimeInputs = [
+        alejandra
+        pkgs.deadnix
+        pkgs.statix
+      ];
+    };
 
     # For `nix flake check`
-    checks = forAllSystems ({ pkgs, alejandra, ... }: let
+    checks.${system}.overall = let
       yamllintConfig = builtins.toFile "yamllint.yaml" (builtins.toJSON {
         extends = "default";
         ignore = [ "**/*sops*" "**/*secrets*" ];
@@ -130,15 +85,14 @@
           truthy.allowed-values = [ "true" "false" "on" ];
         };
       });
-    in {
-      overall = pkgs.runCommand "check-overall" { } ''
+    in
+      pkgs.runCommand "check-overall" { } ''
         cd ${self}
-        ${inputs.nixpkgs.lib.getExe alejandra} --check .
-        ${inputs.nixpkgs.lib.getExe pkgs.deadnix} --fail .
-        ${inputs.nixpkgs.lib.getExe pkgs.statix} check . -i clients/Void/config.nix
-        ${inputs.nixpkgs.lib.getExe pkgs.yamllint} -c ${yamllintConfig} .
+        ${lib.getExe alejandra} --check .
+        ${lib.getExe pkgs.deadnix} --fail .
+        ${lib.getExe pkgs.statix} check . -i clients/Void/config.nix
+        ${lib.getExe pkgs.yamllint} -c ${yamllintConfig} .
         touch $out
       '';
-    });
   };
 }

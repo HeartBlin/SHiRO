@@ -10,28 +10,23 @@
   services = {
     hydra = {
       enable = true;
-      listenHost = "localhost";
-      port = 3000;
       hydraURL = "https://hydra.heartblin.eu";
       notificationSender = "hydra@heartblin.eu";
-      extraConfig = ''server_store_uri = file:///var/lib/hydra-cache'';
+      listenHost = "localhost";
+      useSubstitutes = true;
       queueRunner = {
+        grpc.unixSocket = "/run/hydra-queue-runner-grpc.sock";
         settings = {
-          useSubstitutes = true;
           tokenPaths = [ config.age.secrets.hydra.path ];
           remoteStoreAddr = [ "file:///var/lib/hydra-cache?secret-key=/etc/nix/hydra-cache.secret&compression=zstd&write-nar-listing=1" ];
-        };
-
-        grpc = {
-          address = "[::1]";
-          port = 50051;
         };
       };
     };
 
     hydra-builder = {
       enable = true;
-      queueRunnerAddr = "http://[::1]:50051";
+      settings.useSubstitutes = true;
+      queueRunnerAddr = "unix:///run/hydra-queue-runner-grpc.sock";
       authorizationFile = config.age.secrets.hydra.path;
     };
 
@@ -41,9 +36,18 @@
     '';
   };
 
-  nix = { settings.allowed-users = [ "hydra" "hydra-www" ]; };
+  nix.settings.allowed-users = [ "hydra" "hydra-www" ];
+  users.groups.hydra-cache.members = [ "caddy" ];
   systemd = {
-    services.hydra-queue-runner.serviceConfig.ReadWritePaths = [ "/var/lib/hydra-cache" ];
-    tmpfiles.rules = [ "d /var/lib/hydra-cache 0755 hydra-queue-runner hydra - -" ];
+    services.hydra-queue-runner = {
+      serviceConfig.ReadWritePaths = [ "/var/lib/hydra-cache" ];
+      path = [ config.nix.package ];
+    };
+    tmpfiles.rules = [ "d /var/lib/hydra-cache 2750 hydra-queue-runner hydra-cache -" ];
+    sockets.hydra-queue-runner-grpc.socketConfig = {
+      SocketUser = "hydra-builder";
+      SocketGroup = "hydra";
+      SocketMode = "0660";
+    };
   };
 }
