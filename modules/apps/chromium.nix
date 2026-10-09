@@ -16,6 +16,9 @@
           "JXLImageFormat"
           "MiddleClickAutoscroll"
         ]}"
+        "--disable-features=${lib.concatStringsSep "," [
+          "WaylandWpColorManagerV1"
+        ]}"
       ];
     })
   ];
@@ -71,6 +74,7 @@
         bookmark_bar = mkFolder "Bookmarks Bar" [
           (mkFolder "Selfhosted" [
             (mkUrl "Beszel" "https://info.heartblin.eu/system/92t2tf4vjx1pw3y")
+            (mkUrl "Hydra" "https://hydra.heartblin.eu")
             (mkUrl "Jellyfin" "https://media.heartblin.eu")
             (mkUrl "Nextcloud" "https://files.heartblin.eu")
             (mkUrl "Soulseek" "https://soul.heartblin.eu")

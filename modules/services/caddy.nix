@@ -69,7 +69,18 @@ in {
     '';
 
     virtualHosts = {
-      "hydra.${domain}".extraConfig = mTLS "reverse_proxy http://[::1]:3000";
+      "hydra.${domain}".extraConfig = mTLS ''
+        handle /favicon.ico {
+          root * ${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps
+          rewrite * /nix-snowflake.svg
+          file_server
+        }
+
+        handle {
+          reverse_proxy http://[::1]:3000
+        }
+      '';
+
       "files.${domain}".extraConfig = mTLS "reverse_proxy http://[::1]:8090";
       "media.${domain}".extraConfig = mTLS "reverse_proxy http://[::1]:8096";
       "vault.${domain}".extraConfig = mTLS "reverse_proxy http://[::1]:8222";

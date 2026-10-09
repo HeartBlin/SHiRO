@@ -96,11 +96,11 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1791469368,
-        "narHash": "sha256-g4C+Y1IKfrMhflkh9FbRZUFl66abgmwFNbCEiEfWzDQ=",
+        "lastModified": 1791490907,
+        "narHash": "sha256-ynmfWj0wjhlNurdaoN12G2ujoqkc1Qn4C6FScWLnPd0=",
         "owner": "HeartBlin",
         "repo": "KURO",
-        "rev": "3daa7aeafb91ccdaaa8e671594982100809bdbf0",
+        "rev": "f68022d3c0bf763b2f604f3e58bb0657592cf3e2",
         "type": "github"
       },
       "original": {
@@ -167,11 +167,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1791336361,
-        "narHash": "sha256-7WQwlykef1x8n7aoyw4XP6882i2NRs5F6dVCXZ1NI1g=",
-        "rev": "7dd199b0e2993e37b4775ed66b1c291699608c9f",
+        "lastModified": 1791366222,
+        "narHash": "sha256-/4ezBOv6aldGab7qTb6ls3SDpgzG8kuuSqEAA9zEZ8E=",
+        "rev": "39ad350a0602fa0a58a544344e3e9187526ea45c",
         "type": "tarball",
-        "url": "https://releases.nixos.org/nixpkgs/nixpkgs-26.11pre1086972.7dd199b0e299/nixexprs.tar.zst"
+        "url": "https://releases.nixos.org/nixpkgs/nixpkgs-26.11pre1087089.39ad350a0602/nixexprs.tar.zst"
       },
       "original": {
         "type": "tarball",
@@ -180,11 +180,11 @@
     },
     "nixpkgs_3": {
       "locked": {
-        "lastModified": 1791260994,
-        "narHash": "sha256-MFBjw66d4h06MvpW6lIl7RwarLteD0sk859CncGwb1Q=",
-        "rev": "151fa4e8ddfdd8dd25d945ad94ed54a13de9f6e4",
+        "lastModified": 1791456040,
+        "narHash": "sha256-gRZ/s8WQJ2CsXdhcDVQH34qxuL0MuMCOs3aBiK1Prsw=",
+        "rev": "e7439b6b14ad3cc35d05608ebca9bce01a25f5f8",
         "type": "tarball",
-        "url": "https://releases.nixos.org/nixos/unstable/nixos-26.11pre1086391.151fa4e8ddfd/nixexprs.tar.zst"
+        "url": "https://releases.nixos.org/nixos/unstable/nixos-26.11pre1087755.e7439b6b14ad/nixexprs.tar.zst"
       },
       "original": {
         "type": "tarball",

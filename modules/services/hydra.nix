@@ -1,4 +1,4 @@
-{ config, self, ... }:
+{ config, pkgs, self, ... }:
 
 {
   age.secrets.hydra = {
@@ -31,8 +31,21 @@
     };
 
     caddy.virtualHosts."cache.heartblin.eu".extraConfig = ''
-      root * /var/lib/hydra-cache
-      file_server
+      handle /favicon.ico {
+        root * ${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps
+        rewrite * /nix-snowflake.svg
+        file_server
+      }
+
+      handle / {
+        root * ${pkgs.writeTextDir "index.html" (builtins.readFile ./lib/cache.html)}
+        file_server
+      }
+
+      handle {
+        root * /var/lib/hydra-cache
+        file_server
+      }
     '';
   };
 
