@@ -4,23 +4,87 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>KURO Cache</title>
+    <link rel="stylesheet" href="https://unpkg.com/98.css@0.1.20">
     <style>
-      @import url('https://fonts.googleapis.com/css2?family=Cascadia+Code:ital,wght@0,200..700;1,200..700&family=Google+Sans+Code:ital,wght,MONO@0,300..800,1;1,300..800,1&display=swap');
-
       body {
-        background: #1E1E1E;
-        color: #9CDCFE;
-        font: 16px Google Sans Code, system-ui;
-        font-weight: 400;
-        font-size: 14px;
-        line-height: 15px;
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background: linear-gradient(#0000ff, #000000) fixed;
       }
 
-      code { color: #CE9178; }
+      h1.top-setup {
+        margin: 0;
+        padding: 16px 20px 0px 20px;
+        font: italic 700 clamp(28px, 6vw, 48px)/1.1 'Times New Roman';
+        color: #fff;
+        text-shadow: 0.07em 0.07em 0 #000;
+      }
+
+      h1.bottom-setup {
+        margin: 0;
+        padding: 0px 20px 16px 20px;
+        font: italic 700 clamp(28px, 6vw, 48px)/1.1 'Times New Roman';
+        color: #fff;
+        text-shadow: 0.07em 0.07em 0 #000;
+      }
+
+      .stage {
+        flex: 1;
+        display: grid;
+        place-items: center;
+        padding: 16px;
+        margin-bottom: 100px;
+      }
+
+      .window { width: min(450px, 100%); }
+      .window-body p { line-height: 1.4; }
+      code { overflow-wrap: anywhere; }
     </style>
   </head>
-  <body> Cache URL: <code>https://cache.heartblin.eu</code><br> Cache Public Key: <code>cache.heartblin.eu-1:XicnTDFCv9Nfhfz7hgQi1AoBqs5z5xTmzhTydB+tK6Q=</code>
-    <p>StoreDir: <code>/nix/store</code><br> WantMassQuery: <code>1</code><br> Priority: <code>30</code><br></p>
-    <p>Beware, this cache also serves other things besides packages from the KURO repo</p>
-  </body>
+  <h1 class="top-setup">KURO Cache</h1>
+  <h1 class="bottom-setup">Personal NixOS Cache</h1>
+
+  <main class="stage">
+    <div class="window">
+      <div class="title-bar">
+        <div class="title-bar-text">Cache Name Setup</div>
+        <div class="title-bar-controls">
+          <button aria-label="Close" disabled></button>
+        </div>
+      </div>
+      <div class="window-body">
+        <p>Beware, this cache also serves other things besides packages from the KURO repo</p>
+        <div class="field-row-stacked">
+          <label for="url">Cache URL:</label>
+          <input id="url" type="text" readonly value="https://cache.heartblin.eu" onfocus="this.select()">
+        </div>
+        <div class="field-row-stacked">
+          <label for="key">Cache Public Key:</label>
+          <input id="key" type="text" readonly value="cache.heartblin.eu-1:XicnTDFCv9Nfhfz7hgQi1AoBqs5z5xTmzhTydB+tK6Q=" onfocus="this.select()">
+        </div>
+
+        <fieldset>
+          <legend>nix-cache-info</legend>
+          <div class="field-row">
+            <label for="dir">StoreDir:</label>
+            <input id="dir" type="text" readonly value="/nix/store" onfocus="this.select()">
+          </div>
+          <div class="field-row">
+            <label for="mass">WantMassQuery:</label>
+            <input id="mass" type="text" readonly value="1" onfocus="this.select()">
+          </div>
+          <div class="field-row">
+            <label for="prio">Priority:</label>
+            <input id="prio" type="text" readonly value="30" onfocus="this.select()">
+          </div>
+        </fieldset>
+        <p></p>
+        <section class="field-row" style="justify-content: flex-end">
+          <button class="default">OK</button>
+        </section>
+      </div>
+    </div>
+  </main>
 </html>

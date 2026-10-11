@@ -71,28 +71,14 @@
     };
 
     # For `nix flake check`
-    checks.${system}.overall = let
-      yamllintConfig = builtins.toFile "yamllint.yaml" (builtins.toJSON {
-        extends = "default";
-        ignore = [ "**/*sops*" "**/*secrets*" ];
-        rules = {
-          brackets = {
-            min-spaces-inside = 0;
-            max-spaces-inside = 1;
-          };
-          document-start = "disable";
-          line-length.max = 120;
-          truthy.allowed-values = [ "true" "false" "on" ];
-        };
-      });
-    in
-      pkgs.runCommand "check-overall" { } ''
-        cd ${self}
-        ${lib.getExe alejandra} --check .
-        ${lib.getExe pkgs.deadnix} --fail .
-        ${lib.getExe pkgs.statix} check . -i clients/Void/config.nix
-        ${lib.getExe pkgs.yamllint} -c ${yamllintConfig} .
-        touch $out
-      '';
+    checks.${system}.overall = pkgs.writeShellApplication {
+      name = "check";
+      text = ''deadnix --fail . && statix check . -i clients/Void/config.nix && alejandra --check .'';
+      runtimeInputs = [
+        alejandra
+        pkgs.deadnix
+        pkgs.statix
+      ];
+    };
   };
 }

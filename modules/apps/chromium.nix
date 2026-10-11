@@ -28,6 +28,8 @@
     extensions = [
       "nngceckbapebfimnlniiiahkandclblb" # Bitwarden
       "ddkjiahejlhfcafbddmgiahcphecmpfh" # uBlock Origin Lite
+      "jplgfhpmjnbigmhklmmbgecoobifkmpa" # ProtonVPN
+      "kpmjjdhbcfebfjgdnpjagcndoelnidfj"
     ];
 
     extraOpts = {
