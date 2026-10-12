@@ -38,6 +38,18 @@
         margin-bottom: 100px;
       }
 
+      fieldset .field-row {
+        display: grid;
+        grid-template-columns: 80px 1fr;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 6px;
+      }
+
+      fieldset .field-row input {
+        width: 100px;
+      }
+
       .window { width: min(450px, 100%); }
       .window-body p { line-height: 1.4; }
       code { overflow-wrap: anywhere; }
@@ -51,7 +63,7 @@
       <div class="title-bar">
         <div class="title-bar-text">Cache Name Setup</div>
         <div class="title-bar-controls">
-          <button aria-label="Close" disabled></button>
+          <button aria-label="Close"></button>
         </div>
       </div>
       <div class="window-body">

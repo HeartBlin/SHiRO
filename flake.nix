@@ -4,7 +4,6 @@
 
     # Cached by own Hydra instance
     kuro.url = "github:HeartBlin/KURO";
-    hjem.url = "github:HeartBlin/hjem-shim";
 
     disko = {
       url = "github:nix-community/disko";
@@ -14,14 +13,6 @@
     nix-index-database = {
       url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    lanzaboote = {
-      url = "github:nix-community/lanzaboote";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        pre-commit.follows = "";
-      };
     };
 
     agenix = {

@@ -14,7 +14,7 @@
     user
 
     # Desktop
-    cage
+    # cage
 
     # Hardware
     amd

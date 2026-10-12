@@ -33,7 +33,7 @@ in {
       };
 
       "launcher_window" = {
-        "opacity" = 0.95;
+        "opacity" = 1;
         "client_side_decorations"."enabled" = true;
         "compact_mode"."enabled" = true;
       };

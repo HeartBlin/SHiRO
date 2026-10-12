@@ -1,7 +1,7 @@
 { inputs, pkgs, lib, ... }:
 
 {
-  imports = [ inputs.lanzaboote.nixosModules.default ];
+  imports = [ inputs.kuro.nixosModules.lanzaboote ];
   environment.systemPackages = [ pkgs.sbctl ];
   boot = {
     initrd.systemd.enable = true;

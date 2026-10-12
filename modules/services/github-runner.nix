@@ -4,7 +4,6 @@ let
   repos = {
     kuro = "https://github.com/HeartBlin/KURO";
     shiro = "https://github.com/HeartBlin/SHiRO";
-    hjem-shim = "https://github.com/HeartBlin/hjem-shim";
   };
 
   mkRunner = _name: url: {

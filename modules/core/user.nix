@@ -1,7 +1,7 @@
 { config, inputs, ... }:
 
 {
-  imports = [ inputs.hjem.nixosModules.default ];
+  imports = [ inputs.kuro.nixosModules.hjem ];
   config = let
     userName = config.users.users.primaryUser.name;
     userHome = config.users.users.primaryUser.home;
@@ -13,8 +13,8 @@
     };
 
     hjem = {
-      cli.package = inputs.hjem.packages."x86_64-linux".hjem;
-      linker = inputs.hjem.packages."x86_64-linux".hjem;
+      cli.package = inputs.kuro.packages."x86_64-linux".hjem;
+      linker = inputs.kuro.packages."x86_64-linux".hjem;
       clobberByDefault = true;
       users.primaryUser = {
         enable = true;
